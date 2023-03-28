@@ -2,7 +2,9 @@
 Titre du projet : Plateforme de réservation de cours de pilotage
 
 Objectif du projet : Développer une application web en Django permettant aux utilisateurs de réserver des cours de pilotage et aux écoles de pilotage de publier des cours.
+
 (ceci est le cahier des charges, au vue du temps donné, de nombreuse fonctionnalitées ne sont pas encore présentes)
+
 Fonctionnalités principales :
 
 Inscription et authentification :
