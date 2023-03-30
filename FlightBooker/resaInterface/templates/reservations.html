@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  {% include 'entetes.html' %}
+  <title>Réservations</title>
+
+
+
+</head>
+
+<body>
+  {% load static %}
+  {% include 'navbar.html' %}
+  {% if user.is_authenticated %}
+  {% if user.groups.all %}
+  {% for group in user.groups.all %}
+  {% if group.name == 'schools' %}
+  <h1>Bienvenue {{ user.username }} vous êtes une école</h1>
+  <main>
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% if reservations %}   
+          <section class="gallery">
+            {% for reservation in reservations %}
+              {% if reservation.school.name == user.username %}
+             
+                  
+                    <form method="post" class="me-2 ms-2" required>
+                      {% csrf_token %}
+                      <div class="box">
+                        {% if reservation.course.image %}
+                          <img src="{{ reservation.course.image.url }}" alt="{{ reservation.course.title }}" class="card-img-top">
+                        {% else %}
+                          <img src="{% static 'images/logo.png' %}" alt="{{ reservation.course.title }}" class="card-img-top" style="width: 50px">
+                        {% endif %}
+                        <div class="card-body">
+                          <h5 class="card-title">{{ reservation.course.title }} reservé par {{ reservation.user }}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{ reservation.school.name }}</h6>
+                          <h6 class="card-subtitle mb-2 text-muted">{{ reservation.date }} - {{ reservation.time }}</h6>
+                          <p class="card-text">{{ reservation.course.description }}</p>
+                          <button type="submit" class="btn btn-outline-dark text-white" >Annuler la reservation de {{ reservation.user }}</button>
+                          <select class="form-select fs-3 text-center invisible" name="id">
+                            <option value="{{reservation.id}}">{{reservation.id}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </form>
+                  
+               
+              {% endif %}
+            {% endfor %} 
+          </section>
+          {% else %}
+            <div class="col-lg-12 col-md-8 mx-auto text-center">
+              <h4>Aucunes réservations</h4>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+{% endif %}
+{% endfor %}
+{% else %}
+  <main>
+    <section>
+      <div class="img_resa">
+        <img src="{% static 'images/slide2.jpg' %}" alt="Image 2" style="">
+
+        <div class="resa-caption ">
+          <h1> Vos réservations : {{ user.username }}</h1>
+
+
+        </div>
+      </div>
+    </section>
+
+    <form method="post" class="me-2 ms-2" required>
+      {% csrf_token %}  
+      {% if reservations %}
+      <section class="gallery"> 
+        {% for reservation in reservations %}
+            <div class="box">
+              {% if reservation.course.image %}
+              <img src="{{ reservation.course.image.url }}" alt="{{ reservation.course.title }}" class="card-img-top">
+              {% else %}
+              <img src="{% static 'images/logo.png' %}" alt="{{ reservation.course.title }}" class="card-img-top"
+                style="width: 50px">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ reservation.course.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ reservation.school.name }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ reservation.date }} - {{ reservation.time }}</h6>
+                <p class="card-text">{{ reservation.course.description }}</p>
+                <button type="submit" class="btn btn-outline-dark" >Annuler la reservation</button>
+                <select class="form-select fs-3 text-center invisible" name="id">
+                  <option value="{{reservation.id}}">{{reservation.id}}</option>
+                </select>
+              </div>  </div>
+          {% endfor %}
+      </section>
+    
+      {% else %}
+      <div class="col-lg-12 col-md-8 mx-auto text-center">
+        <h4>Aucunes réservations</h4>
+      </div>
+      {% endif %}
+
+    </form>
+  </main>
+  {% endif %}
+  {% endif %}
+
+
+  {% include 'footer.html' %}
+
+</body>
+
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>

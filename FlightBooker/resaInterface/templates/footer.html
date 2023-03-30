@@ -1,0 +1,35 @@
+<footer class="footer-distributed">
+  <hr>{% load static %}
+  <div class="footer-right">
+
+    <a href="#"><i class="fa fa-facebook"></i></a>
+    <a href="#"><i class="fa fa-instagram"></i></a>
+    <a href="#"><i class="fa fa-linkedin"></i></a>
+    <a href="#"><i class="fa fa-whatsapp"></i></a>
+
+  </div>
+
+  <div class="footer-left">
+
+    <p class="footer-links">
+     
+        <a class="link-1" href="{% url 'index' %}"> Réserver un cours</a>
+  
+    {% if user.is_authenticated %}
+       
+            <a href="{% url 'Reservations' %}">Mes réservations</a>
+       
+      
+            <a href="{% url 'logout' %}">Se déconnecter</a>
+      {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login_register' %}"><i class="bi bi-person-circle"></i> Se connecter / S'inscrire</a>
+            </li>
+        {% endif %}
+    </p>
+    <div style="display: flex; flex-direction: row"><p>FLIGHT BOOKER &copy; 2023 / Réalisé par <a href="https://transition-web.com/">Transition Web</a><a href=""><img src="{% static 'images/logo.png' %}" alt="" style="margin-left:20px;width:50px"></a></p>
+    </div>
+    
+  </div>
+
+</footer>

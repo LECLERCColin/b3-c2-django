@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% include 'entetes.html' %}
+    <title>Login/Register</title>
+
+    
+</head>
+
+<body>
+  {% load static %}
+    {% include 'navbar.html' %}
+    <div class="cotn_principal">
+        <div class="cont_centrar">
+            <div class="cont_login">
+                <div class="cont_info_log_sign_up">
+                    <div class="col_md_login">
+                        <div class="cont_ba_opcitiy">
+                            <h2>CONNEXION</h2>
+                            <button class="btn_login" name="login_form" onclick="change_to_login()">CONNEXION</button>
+
+                        </div>
+                    </div>
+                    <div class="col_md_sign_up">
+                        <div class="cont_ba_opcitiy">
+                            <h2>INSCRIPTION</h2>
+                            <button class="btn_sign_up" name="register_form" onclick="change_to_sign_up()">INSCRIPTION</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="cont_back_info">
+                    <div class="cont_img_back_grey">
+                        <img src="{% static 'images/slide1.jpg' %}" alt=""/>
+                    </div>
+                </div>
+                <div class="cont_forms" >
+                    <div class="cont_img_back_">
+                        <img src="{% static 'images/slide2.jpg' %}" alt=""/>
+                    </div>
+                    <div class="cont_form_login">
+                        <a href="#" onclick="hidden_login_and_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
+                        <h2>CONNEXION</h2>
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <div style="display: flex;flex-direction: column;align-items: center;">
+                               
+                                <label for="username" class="form__label">Nom d'utilisateur :</label>
+                                <input type="text" name="username" placeholder="Email" style=""/>
+                                <label for="username" class="form__label">Mot de passe :</label>
+                               
+                                <input type="password" name="password" placeholder="Password" />
+                            </div>
+                            
+                            <button class="btn_login" name="login_form" onclick="change_to_login()">CONNEXION</button>
+                        </form>
+                    </div>
+                    <div class="cont_form_sign_up">
+                        <a href="#" onclick="hidden_login_and_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
+                        <h2>INSCRIPTION</h2>
+                        <form method="POST" action="{% url 'login_register' %}">
+                            {% csrf_token %}
+                            <div class="all-input" style="display: flex;flex-direction: column;">
+                                {% for field in register_form %}
+                                {% if field.name == 'is_school' %}
+                                    <div class="form-group">
+                                        <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        <input type="checkbox" class="form-check-input" id="{{ field.auto_id }}" name="{{ field.html_name }}" {% if field.value %}checked{% endif %} onclick="toggleSchoolFields()">
+                                    </div>
+                                    <div id="school_fields" style="display: none;">
+                                {% else %}
+                                    <div class="form-group">
+                                        <label for="{{ field.auto_id }}">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <small class="form-text text-muted"></small>
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <div class="alert alert-danger mt-2">
+                                                {{ field.errors|join:"<br>" }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if field.name == 'school_phone' %}
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <button class="btn_sign_up" name="register_form" onclick="change_to_sign_up()">INSCRIPTION</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+<script>
+
+  const time_to_show_login = 400;
+const time_to_hidden_login = 200;
+
+function change_to_login() {
+    var contFormsActiveSignUp = document.querySelector(".cont_forms_active_sign_up");
+document.querySelector('.cont_forms').className = "cont_forms cont_forms_active_login";  
+document.querySelector('.cont_form_login').style.display = "block";
+document.querySelector('.cont_form_sign_up').style.opacity = "0"; 
+if(contFormsActiveSignUp != null){
+contFormsActiveSignUp.style.height = "420px";
+}            
+
+setTimeout(function(){  document.querySelector('.cont_form_login').style.opacity = "1"; },time_to_show_login);  
+  
+setTimeout(function(){    
+document.querySelector('.cont_form_sign_up').style.display = "none";
+},time_to_hidden_login);  
+  }
+
+  const time_to_show_sign_up = 100;
+  const time_to_hidden_sign_up = 400;
+
+function change_to_sign_up(at) {
+  document.querySelector('.cont_forms').className = "cont_forms cont_forms_active_sign_up";
+  document.querySelector('.cont_form_sign_up').style.display = "block";
+document.querySelector('.cont_form_login').style.opacity = "0";
+var contFormsActiveSignUp = document.querySelector(".cont_forms_active_sign_up");
+contFormsActiveSignUp.style.height = "660px";
+setTimeout(function(){  document.querySelector('.cont_form_sign_up').style.opacity = "1";
+},time_to_show_sign_up);  
+
+setTimeout(function(){   document.querySelector('.cont_form_login').style.display = "none";
+},time_to_hidden_sign_up);  
+
+
+}    
+
+const time_to_hidden_all = 500;
+
+function hidden_login_and_sign_up() {
+
+document.querySelector('.cont_forms').className = "cont_forms";  
+document.querySelector('.cont_form_sign_up').style.opacity = "0";               
+document.querySelector('.cont_form_login').style.opacity = "0"; 
+
+setTimeout(function(){
+document.querySelector('.cont_form_sign_up').style.display = "none";
+document.querySelector('.cont_form_login').style.display = "none";
+},time_to_hidden_all);  
+  
+  }
+ 
+
+  function toggleSchoolFields() {
+    const isSchoolCheckbox = document.getElementById('{{ register_form.is_school.auto_id }}');
+    const schoolFields = document.getElementById('school_fields');
+    var contFormsActiveSignUp = document.querySelector(".cont_forms_active_sign_up");
+    if (isSchoolCheckbox.checked) {
+        contFormsActiveSignUp.style.height = "870px";
+        schoolFields.style.display = 'flex';
+        schoolFields.style.flexDirection = 'column';
+        schoolFields.style.alignItems = 'center';
+        
+    } else {
+        contFormsActiveSignUp.style.height = "660px";
+        schoolFields.style.display = 'none';
+    }
+}
+</script>
